@@ -1,0 +1,10 @@
+{
+  "id": "gfms-local",
+  "name": "GFMS Local",
+  "values": [
+    { "key": "baseUrl", "value": "http://localhost:5000", "enabled": true },
+    { "key": "token", "value": "", "enabled": true },
+    { "key": "goatId", "value": "", "enabled": true },
+    { "key": "medicineId", "value": "", "enabled": true }
+  ]
+}

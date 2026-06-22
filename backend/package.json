@@ -1,0 +1,64 @@
+{
+  "name": "gfms-backend",
+  "version": "1.0.0",
+  "description": "Goat Farm Management System API",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "seed": "node src/scripts/seed.js",
+    "test": "jest --coverage --forceExit tests/unit",
+    "test:integration": "jest --forceExit tests/integration --testTimeout=600000",
+    "test:all": "jest --coverage --forceExit",
+    "test:watch": "jest --watch"
+  },
+  "keywords": ["goat-farm", "livestock", "management"],
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cloudinary": "^2.5.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-mongo-sanitize": "^2.2.0",
+    "express-rate-limit": "^7.5.0",
+    "express-validator": "^7.2.1",
+    "helmet": "^8.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.9.3",
+    "multer": "^1.4.5-lts.1",
+    "node-cron": "^3.0.3",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
+    "winston": "^3.17.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "mongodb-memory-server": "^10.1.3",
+    "nodemon": "^3.1.9",
+    "supertest": "^7.0.0"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "coverageDirectory": "coverage",
+    "collectCoverageFrom": [
+      "src/utils/apiResponse.js",
+      "src/utils/helpers.js",
+      "src/utils/pagination.js",
+      "src/utils/queryBuilder.js",
+      "src/services/auth.service.js",
+      "src/services/alert.service.js",
+      "src/services/medicine.service.js",
+      "src/middleware/error.middleware.js"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 45,
+        "functions": 50,
+        "lines": 55,
+        "statements": 55
+      }
+    },
+    "testMatch": ["**/tests/**/*.test.js"]
+  }
+}
