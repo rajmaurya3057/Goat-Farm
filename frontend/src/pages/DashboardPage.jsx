@@ -5,6 +5,8 @@ import { goatsApi } from '../api/goats.api';
 import { medicinesApi } from '../api/medicines.api';
 import { vaccinationsApi } from '../api/vaccinations.api';
 import { treatmentsApi } from '../api/treatments.api';
+import { equipmentApi } from '../api/equipment.api';
+import { settingsApi } from '../api/settings.api';
 import StatCard from '../components/StatCard';
 
 export default function DashboardPage() {
@@ -51,12 +53,57 @@ export default function DashboardPage() {
     },
   });
 
+  const totalEquipmentQuery = useQuery({
+    queryKey: ['equipments', 'count'],
+    queryFn: async () => {
+      const res = await equipmentApi.getEquipments({ limit: 1 });
+      return res.data.meta?.totalRecords ?? 0;
+    },
+  });
+
+  const workingEquipmentQuery = useQuery({
+    queryKey: ['equipments', 'count', 'working'],
+    queryFn: async () => {
+      const res = await equipmentApi.getEquipments({ status: 'Working', limit: 1 });
+      return res.data.meta?.totalRecords ?? 0;
+    },
+  });
+
+  const maintenanceEquipmentQuery = useQuery({
+    queryKey: ['equipments', 'count', 'under-maintenance'],
+    queryFn: async () => {
+      const res = await equipmentApi.getEquipments({ status: 'Under Maintenance', limit: 1 });
+      return res.data.meta?.totalRecords ?? 0;
+    },
+  });
+
+  const nonWorkingEquipmentQuery = useQuery({
+    queryKey: ['equipments', 'count', 'non-working'],
+    queryFn: async () => {
+      const res = await equipmentApi.getEquipments({ status: 'Non Working', limit: 1 });
+      return res.data.meta?.totalRecords ?? 0;
+    },
+  });
+
+  const settingsQuery = useQuery({
+    queryKey: ['settings'],
+    queryFn: async () => {
+      const res = await settingsApi.getSettings();
+      return res.data?.data;
+    },
+  });
+
   const handleRefreshAll = () => {
     goatsQuery.refetch();
     medicinesQuery.refetch();
     lowStockQuery.refetch();
     vaccinationsQuery.refetch();
     treatmentsQuery.refetch();
+    totalEquipmentQuery.refetch();
+    workingEquipmentQuery.refetch();
+    maintenanceEquipmentQuery.refetch();
+    nonWorkingEquipmentQuery.refetch();
+    settingsQuery.refetch();
   };
 
   const statCards = [
@@ -130,23 +177,94 @@ export default function DashboardPage() {
         </svg>
       ),
     },
+    {
+      title: 'Total Equipment',
+      value: totalEquipmentQuery.data ?? 0,
+      description: 'Total farm utility units',
+      colorClass: 'bg-emerald-50 text-emerald-700 border-emerald-100/80',
+      isLoading: totalEquipmentQuery.isLoading,
+      isError: totalEquipmentQuery.isError,
+      onRetry: () => totalEquipmentQuery.refetch(),
+      icon: (
+        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75a4.5 4.5 0 01-4.822 4.492L12.5 15.67a2.25 2.25 0 01-3.182-3.182l4.428-4.428A4.5 4.5 0 0118.25 3.25c1.19 0 2.274.463 3.084 1.218A1.5 1.5 0 0021.75 6.75zM12.5 15.67l-6 6A1.5 1.5 0 014.28 19.46l6-6M4.28 19.46a1.5 1.5 0 10-2.12-2.12l-1 1A1.5 1.5 0 003.28 20.46l1-1z" />
+        </svg>
+      ),
+    },
+    {
+      title: 'Working Equipment',
+      value: workingEquipmentQuery.data ?? 0,
+      description: 'Active and operational units',
+      colorClass: 'bg-teal-50 text-teal-700 border-teal-100/80',
+      isLoading: workingEquipmentQuery.isLoading,
+      isError: workingEquipmentQuery.isError,
+      onRetry: () => workingEquipmentQuery.refetch(),
+      icon: (
+        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z" />
+        </svg>
+      ),
+    },
+    {
+      title: 'Under Maintenance',
+      value: maintenanceEquipmentQuery.data ?? 0,
+      description: 'Units currently serviced',
+      colorClass: 'bg-amber-50 text-amber-700 border-amber-100/80',
+      isLoading: maintenanceEquipmentQuery.isLoading,
+      isError: maintenanceEquipmentQuery.isError,
+      onRetry: () => maintenanceEquipmentQuery.refetch(),
+      icon: (
+        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M11.42 15.014A3 3 0 008 8.486m-3 3.5a3.001 3.001 0 003.75-2.75M3 10.5h10.5m-3-3l3 3-3 3M19.5 21a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
+      ),
+    },
+    {
+      title: 'Non Working',
+      value: nonWorkingEquipmentQuery.data ?? 0,
+      description: 'Broken or offline units',
+      colorClass: 'bg-red-50 text-red-700 border-red-100/80',
+      isLoading: nonWorkingEquipmentQuery.isLoading,
+      isError: nonWorkingEquipmentQuery.isError,
+      onRetry: () => nonWorkingEquipmentQuery.refetch(),
+      icon: (
+        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+        </svg>
+      ),
+    },
   ];
 
-  const anyLoading = goatsQuery.isLoading || medicinesQuery.isLoading || lowStockQuery.isLoading || vaccinationsQuery.isLoading || treatmentsQuery.isLoading;
+  const anyLoading =
+    goatsQuery.isLoading ||
+    medicinesQuery.isLoading ||
+    lowStockQuery.isLoading ||
+    vaccinationsQuery.isLoading ||
+    treatmentsQuery.isLoading ||
+    totalEquipmentQuery.isLoading ||
+    workingEquipmentQuery.isLoading ||
+    maintenanceEquipmentQuery.isLoading ||
+    nonWorkingEquipmentQuery.isLoading;
 
   return (
     <div className="space-y-6">
       <div className="rounded-xl border border-surface-200 bg-white p-6 shadow-sm flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h2 className="text-xl font-bold text-surface-900">
-            Welcome back, {user?.name}
+            {settingsQuery.data?.farmName || 'Goat Farm Dashboard'}
           </h2>
+          {settingsQuery.data?.ownerName && (
+            <p className="mt-0.5 text-xs font-semibold text-primary-700 uppercase tracking-wider">
+              {settingsQuery.data.ownerName}
+            </p>
+          )}
           <p className="mt-1 text-sm text-surface-700">
-            You are signed in as{' '}
+            Welcome back,{' '}
+            <span className="font-medium text-surface-900">{user?.name}</span>. You are signed in as{' '}
             <span className="font-medium text-primary-700">
               {ROLE_LABELS[user?.role] || user?.role}
             </span>
-            . Your farm management dashboard is ready.
+            .
           </p>
         </div>
         <button

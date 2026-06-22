@@ -3,8 +3,9 @@ const { successResponse } = require('../utils/apiResponse');
 
 const getAlerts = async (req, res, next) => {
   try {
-    const { alerts, meta } = await alertService.getAlerts(req.query);
-    return successResponse(res, alerts, 'Operation successful', 200, meta);
+    const { alerts, meta, unreadCount } = await alertService.getAlerts(req.query);
+    const body = { success: true, message: 'Operation successful', data: alerts, meta, unreadCount };
+    return res.status(200).json(body);
   } catch (error) {
     next(error);
   }

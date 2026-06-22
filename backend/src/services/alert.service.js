@@ -120,12 +120,13 @@ const getAlerts = async (query) => {
     filter.isRead = query.isRead === 'true';
   }
 
-  const [alerts, total] = await Promise.all([
+  const [alerts, total, unreadCount] = await Promise.all([
     Alert.find(filter).sort(sort).skip(skip).limit(limit).lean(),
     Alert.countDocuments(filter),
+    Alert.countDocuments({ isRead: false }),
   ]);
 
-  return { alerts, meta: buildPaginationMeta(total, page, limit) };
+  return { alerts, meta: buildPaginationMeta(total, page, limit), unreadCount };
 };
 
 const markAsRead = async (id) => {

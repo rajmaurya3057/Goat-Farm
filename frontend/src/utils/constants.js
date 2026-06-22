@@ -12,14 +12,29 @@ export const ROUTES = {
   MEDICINES: '/medicines',
   CREATE_MEDICINE: '/medicines/create',
   EDIT_MEDICINE: '/medicines/:id/edit',
+  VACCINATIONS: '/vaccinations',
+  CREATE_VACCINATION: '/vaccinations/create',
+  EDIT_VACCINATION: '/vaccinations/:id/edit',
+  TREATMENTS: '/treatments',
+  CREATE_TREATMENT: '/treatments/create',
+  EDIT_TREATMENT: '/treatments/:id/edit',
+  EQUIPMENT: '/equipment',
+  CREATE_EQUIPMENT: '/equipment/create',
+  EDIT_EQUIPMENT: '/equipment/:id/edit',
+  VIEW_EQUIPMENT: '/equipment/:id',
+  ALERTS: '/alerts',
+  SETTINGS: '/settings',
 };
 
 export const NAV_ITEMS = [
   { label: 'Dashboard', path: '/dashboard', icon: 'dashboard' },
   { label: 'Goats', path: '/goats', icon: 'goats' },
   { label: 'Medicines', path: '/medicines', icon: 'medicines' },
-  { label: 'Alerts', path: '/alerts', icon: 'alerts', disabled: true },
-  { label: 'Settings', path: '/settings', icon: 'settings', disabled: true },
+  { label: 'Vaccinations', path: '/vaccinations', icon: 'vaccinations' },
+  { label: 'Treatments', path: '/treatments', icon: 'treatments' },
+  { label: 'Equipment', path: '/equipment', icon: 'equipment' },
+  { label: 'Alerts', path: '/alerts', icon: 'alerts' },
+  { label: 'Settings', path: '/settings', icon: 'settings' },
 ];
 
 export const ROLE_LABELS = {
